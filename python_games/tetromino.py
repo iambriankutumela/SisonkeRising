@@ -8,7 +8,7 @@
 import random, time, pygame, sys
 from pygame.locals import *
 
-FPS = 25
+FRAMES_PER_SECOND = 25
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
 BOXSIZE = 20
@@ -19,7 +19,7 @@ BLANK = '.'
 MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
 
-XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE) / 2)
+HORIZONTAL_MARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE) / 2)
 TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) - 5
 
 #               R    G    B
@@ -158,9 +158,9 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
+    global FRAMES_PER_SECOND_CLOCK, DISPLAYSURF, BASICFONT, BIGFONT
     pygame.init()
-    FPSCLOCK = pygame.time.Clock()
+    FRAMES_PER_SECOND_CLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
     BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
@@ -247,6 +247,7 @@ def runGame():
                         fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % len(PIECES[fallingPiece['shape']])
 
                 # making the piece fall faster with the down key
+                
                 elif (event.key == K_DOWN or event.key == K_s):
                     movingDown = True
                     if isValidPosition(board, fallingPiece, adjY=1):
@@ -298,7 +299,7 @@ def runGame():
             drawPiece(fallingPiece)
 
         pygame.display.update()
-        FPSCLOCK.tick(FPS)
+        FRAMES_PER_SECOND_CLOCK.tick(FRAMES_PER_SECOND)
 
 
 def makeTextObjs(text, font, color):
@@ -358,7 +359,7 @@ def showTextScreen(text):
 
     while checkForKeyPress() == None:
         pygame.display.update()
-        FPSCLOCK.tick()
+        FRAMES_PER_SECOND_CLOCK.tick()
 
 
 def checkForQuit():
@@ -454,7 +455,7 @@ def removeCompleteLines(board):
 def convertToPixelCoords(boxx, boxy):
     # Convert the given xy coordinates of the board to xy
     # coordinates of the location on the screen.
-    return (XMARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
+    return (HORIZONTAL_MARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
 
 
 def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
@@ -472,10 +473,10 @@ def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
 
 def drawBoard(board):
     # draw the border around the board
-    pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, (BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
+    pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (HORIZONTAL_MARGIN - 3, TOPMARGIN - 7, (BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
 
     # fill the background of the board
-    pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
+    pygame.draw.rect(DISPLAYSURF, BGCOLOR, (HORIZONTAL_MARGIN, TOPMARGIN, BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
     # draw the individual boxes on the board
     for x in range(BOARDWIDTH):
         for y in range(BOARDHEIGHT):
